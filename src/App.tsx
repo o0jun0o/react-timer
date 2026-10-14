@@ -1,9 +1,23 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import './App.css';
 
 function App() {
   // タイマーの秒数を管理する「箱（State）」を用意
   const [time, setTime] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+  useEffect(() => {
+    let intervalId: number | undefined;
+
+    if (isRunning) {
+      intervalId = window.setInterval(() => {
+        setTime((prevTime) => prevTime + 1);
+      }, 1000);
+    }
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [isRunning]);
 
   return (
     <div>
@@ -13,9 +27,9 @@ function App() {
       </div>
       
       <div>
-        <button>スタート</button>
-        <button>ストップ</button>
-        <button>リセット</button>
+        <button onClick={() => setIsRunning(true)}>スタート</button>
+        <button onClick={() => setIsRunning(false)}>ストップ</button>
+        <button onClick={() => { setIsRunning(false); setTime(0); }}>リセット</button>
       </div>
     </div>
   );
