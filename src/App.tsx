@@ -70,9 +70,15 @@ function App() {
         {formatTime(seconds)}
       </div>
       <div>
-        <button onClick={handleStart}>スタート</button>
-        <button onClick={handleStop}>ストップ</button>
-        <button onClick={handleReset}>リセット</button>
+        <button onClick={handleStart} disabled={isRunning}>
+          スタート
+        </button>
+        <button onClick={handleStop} disabled={!isRunning}>
+          ストップ
+        </button>
+        <button onClick={handleReset} disabled={!isRunning && accumulatedTime === 0}>
+          リセット
+        </button>
       </div>
     </div>
   );
