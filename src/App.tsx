@@ -1,6 +1,18 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 
+// ▼ここを追加
+const formatTime = (totalSeconds: number) => {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  const h = String(hours).padStart(2, '0');
+  const m = String(minutes).padStart(2, '0');
+  const s = String(seconds).padStart(2, '0');
+
+  return `${h}:${m}:${s}`;
+};
 function App() {
   // これまでにストップして貯まった合計時間（ミリ秒）
   const [accumulatedTime, setAccumulatedTime] = useState(0);
@@ -55,7 +67,7 @@ function App() {
     <div style={{ textAlign: 'center', padding: '50px' }}>
       <h1>デジタルタイマー</h1>
       <div style={{ fontSize: '4rem', margin: '20px 0' }}>
-        {seconds}
+        {formatTime(seconds)}
       </div>
       <div>
         <button onClick={handleStart}>スタート</button>
