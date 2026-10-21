@@ -65,6 +65,7 @@ function App() {
 
   // 表示用にミリ秒を秒に変換（切り捨て）
   const seconds = Math.floor(displayTime / 1000);
+  const canReset = isRunning || accumulatedTime > 0;
 
   return (
     <div style={{ textAlign: 'center', padding: '50px' }}>
@@ -79,7 +80,7 @@ function App() {
         <button onClick={handleStop} disabled={!isRunning}>
           ストップ
         </button>
-        <button onClick={handleReset} disabled={!isRunning && accumulatedTime === 0}>
+        <button onClick={handleReset} disabled={!canReset}>
           リセット
         </button>
       </div>
