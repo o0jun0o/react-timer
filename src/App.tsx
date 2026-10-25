@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 
-// ▼ここを追加
+
 const formatTime = (totalSeconds: number) => {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -39,6 +39,7 @@ function App() {
   }, [isRunning, startTime, accumulatedTime]);
 
   const handleStart = () => {
+    if (isRunning) return;
     setStartTime(Date.now()); // スタート時の現在時刻を記録
     setIsRunning(true);
   };
@@ -47,7 +48,9 @@ function App() {
     if (startTime !== null) {
       const now = Date.now();
       // ストップした時点での経過時間を「蓄積時間」に足し込む
-      setAccumulatedTime(accumulatedTime + (now - startTime));
+      const total = accumulatedTime + (now - startTime);
+      setAccumulatedTime(total);
+      setDisplayTime(total); // ← 画面の表示もここで最新に更新する！
     }
     setIsRunning(false);
     setStartTime(null);
@@ -62,6 +65,7 @@ function App() {
 
   // 表示用にミリ秒を秒に変換（切り捨て）
   const seconds = Math.floor(displayTime / 1000);
+  const canReset = isRunning || accumulatedTime > 0;
 
   return (
     <div style={{ textAlign: 'center', padding: '50px' }}>
@@ -70,9 +74,15 @@ function App() {
         {formatTime(seconds)}
       </div>
       <div>
-        <button onClick={handleStart}>スタート</button>
-        <button onClick={handleStop}>ストップ</button>
-        <button onClick={handleReset}>リセット</button>
+        <button onClick={handleStart} disabled={isRunning}>
+          スタート
+        </button>
+        <button onClick={handleStop} disabled={!isRunning}>
+          ストップ
+        </button>
+        <button onClick={handleReset} disabled={!canReset}>
+          リセット
+        </button>
       </div>
     </div>
   );
